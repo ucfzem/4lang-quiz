@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz 4 Langues</title>
+<style>
+:root,[data-theme=dark]{--bg:#1a1410;--surface:#2a1f18;--surface-hover:#35281f;--bg-secondary:#1f1813;--text-primary:#f0e8dc;--text-secondary:#c4b5a5;--gold:#d4a037;--gold-hover:#e0b04b;--gold-light:#f0c040;--border:#4a3728;--shadow:rgba(0,0,0,0.3);--success:#22c55e;--success-bg:#052e16;--success-border:#166534;--error:#ef4444;--error-bg:#450a0a;--error-border:#991b1b;--dot-bg:#4a3728;--dot-current:var(--gold)}
+[data-theme=light]{--bg:#f5f0e8;--surface:#ffffff;--surface-hover:#fcf9f5;--bg-secondary:#f3f0ea;--text-primary:#3d2b1f;--text-secondary:#6b5a4c;--gold:#b8860b;--gold-hover:#c9952c;--gold-light:#d4a037;--border:#d4c5b5;--shadow:rgba(0,0,0,0.08);--success:#16a34a;--success-bg:#f0fdf4;--success-border:#bbf7d0;--error:#dc2626;--error-bg:#fef2f2;--error-border:#fecaca;--dot-bg:#d4c5b5;--dot-current:var(--gold)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);min-height:100vh;padding:16px;color:var(--text-primary);transition:background .3s,color .3s}
+.container{max-width:600px;margin:0 auto;background:var(--surface);border-radius:16px;box-shadow:0 4px 20px var(--shadow);overflow:hidden;transition:background .3s}
+.top-bar{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:var(--surface);border-bottom:1px solid var(--border);transition:background .3s}
+.lang-selector{display:flex;gap:6px}
+.lang-btn{background:transparent;border:2px solid var(--border);border-radius:8px;padding:4px 8px;cursor:pointer;font-size:18px;line-height:1;transition:all .2s;opacity:.5}
+.lang-btn:hover{opacity:.8;border-color:var(--gold)}
+.lang-btn.active{opacity:1;border-color:var(--gold);background:var(--surface-hover)}
+.theme-btn{background:transparent;border:2px solid var(--border);border-radius:8px;padding:4px 8px;cursor:pointer;font-size:18px;line-height:1;transition:all .2s;color:var(--text-primary)}
+.theme-btn:hover{border-color:var(--gold)}
+.header{background:var(--gold);color:var(--bg);padding:20px;text-align:center;transition:background .3s,color .3s}
+.header h1{font-size:20px;font-weight:700}
+.header p{font-size:13px;opacity:.9;margin-top:4px}
+.score-bar{display:flex;justify-content:space-between;align-items:center;padding:12px 20px;background:var(--surface);border-bottom:1px solid var(--border);transition:background .3s}
+.score-text{font-weight:600;font-size:14px;color:var(--text-primary)}
+.dots{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+[dir=rtl] .dots{justify-content:flex-start}
+.dot{width:10px;height:10px;border-radius:50%;background:var(--dot-bg);transition:background .3s;flex-shrink:0}
+.dot.correct{background:var(--success)}
+.dot.wrong{background:var(--error)}
+.dot.current{background:var(--dot-current)}
+.content{padding:20px}
+.situation-card{background:var(--bg-secondary);border-inline-start:4px solid var(--gold);padding:14px 16px;border-radius:8px;margin-bottom:16px;transition:background .3s}
+.situation-title{font-weight:700;color:var(--gold);margin-bottom:4px;font-size:15px}
+.situation-desc{font-size:13px;color:var(--text-secondary)}
+.dialogue-box{background:var(--bg-secondary);border-radius:12px;padding:16px 20px;margin-bottom:16px;font-style:italic;color:var(--text-primary);font-size:15px;transition:background .3s}
+.options{display:flex;flex-direction:column;gap:10px}
+.option-btn{background:var(--surface);border:2px solid var(--border);border-radius:10px;padding:14px 18px;text-align:start;cursor:pointer;font-size:15px;transition:all .2s;color:var(--text-primary)}
+.option-btn:hover{border-color:var(--gold);background:var(--surface-hover)}
+.option-btn.correct{border-color:var(--success);background:var(--success-bg)}
+.option-btn.wrong{border-color:var(--error);background:var(--error-bg)}
+.option-btn.disabled{pointer-events:none;opacity:.6}
+.feedback{margin-top:14px;padding:14px 18px;border-radius:10px;font-size:14px;line-height:1.6;display:none}
+.feedback.correct{background:var(--success-bg);border:1px solid var(--success-border);color:var(--success)}
+.feedback.wrong{background:var(--error-bg);border:1px solid var(--error-border);color:var(--error)}
+.next-btn{display:none;margin-top:16px;background:var(--gold);color:var(--bg);border:none;border-radius:10px;padding:14px 24px;font-size:15px;cursor:pointer;width:100%;font-weight:600;transition:background .2s}
+.next-btn:hover{background:var(--gold-hover)}
+.result-screen{display:none;text-align:center;padding:40px 20px}
+.result-emoji{font-size:60px;margin-bottom:16px}
+.result-title{font-size:24px;font-weight:700;margin-bottom:8px;color:var(--text-primary)}
+.result-subtitle{color:var(--text-secondary);margin-bottom:24px;font-size:15px}
+.restart-btn{background:var(--gold);color:var(--bg);border:none;border-radius:10px;padding:14px 32px;font-size:16px;cursor:pointer;font-weight:600;transition:background .2s}
+.restart-btn:hover{background:var(--gold-hover)}
+@media(max-width:480px){body{padding:8px}.content{padding:16px}.header h1{font-size:18px}}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="top-bar">
+    <div class="lang-selector">
+      <button class="lang-btn active" data-lang="fr" onclick="setLang('fr')" title="Français">🇫🇷</button>
+      <button class="lang-btn" data-lang="en" onclick="setLang('en')" title="English">🇬🇧</button>
+      <button class="lang-btn" data-lang="es" onclick="setLang('es')" title="Español">🇪🇸</button>
+      <button class="lang-btn" data-lang="ar" onclick="setLang('ar')" title="العربية">🇲🇦</button>
+    </div>
+    <button class="theme-btn" id="theme-btn" onclick="toggleTheme()" title="Theme">🌙</button>
+  </div>
+  <div class="header">
+    <h1 id="app-title">🇫🇷 Quiz Français</h1>
+    <p id="app-subtitle">Situations du quotidien & voyage</p>
+  </div>
+  <div id="quiz-screen">
+    <div class="score-bar">
+      <span class="score-text" id="score-text">Score : 0 / 0</span>
+      <div class="dots" id="dots"></div>
+    </div>
+    <div class="content">
+      <div class="situation-card">
+        <div class="situation-title" id="sit-title"></div>
+        <div class="situation-desc" id="sit-desc"></div>
+      </div>
+      <div class="dialogue-box">💬 <span id="dialogue"></span></div>
+      <div class="options" id="options"></div>
+      <div class="feedback" id="feedback"></div>
+      <button class="next-btn" id="next-btn">Question suivante →</button>
+    </div>
+  </div>
+  <div id="result-screen" class="result-screen">
+    <div class="result-emoji" id="res-emoji"></div>
+    <div class="result-title" id="res-title"></div>
+    <div class="result-subtitle" id="res-subtitle"></div>
+    <button class="restart-btn" id="restart-btn">Rejouer</button>
+  </div>
+</div>
+
+<script>
+const QUESTIONS = [
+  {
+    id:"cafe",fr:{s:"☕ Au café",d:"Tu es dans un café à Paris. La serveuse vient de t'accueillir.",q:"Bonjour ! Vous désirez ?",opts:[
+      {t:"Un café au lait, s'il vous plaît.",c:1,f:"✅ Parfait ! 'Un café au lait' est correct, bien que les Français disent souvent 'un café crème'."},
+      {t:"Je veux un café avec du lait.",c:0,f:"❌ Compréhensible mais trop direct. On dit plutôt 'un café au lait' ou 'un café crème'."},
+      {t:"Donne-moi un café lait.",c:0,f:"❌ Trop brusque ! 'Donne-moi' est impoli. Utilise 's'il vous plaît'."},
+      {t:"Café lait.",c:0,f:"❌ Trop court et sans politesse. Il faut au moins 'Un café au lait, s'il vous plaît.'"}]},
+    en:{s:"☕ At the café",d:"You're at a café in London. The waitress greets you.",q:"Good morning! What can I get for you?",opts:[
+      {t:"A latte, please.",c:1,f:"✅ Perfect! 'A latte' is the natural way to order coffee with milk."},
+      {t:"I want a coffee with milk.",c:0,f:"❌ Understandable but too direct. 'A latte, please' sounds more natural."},
+      {t:"Give me a coffee milk.",c:0,f:"❌ Too abrupt! 'Give me' is impolite. Always say 'please'."},
+      {t:"Coffee milk.",c:0,f:"❌ Too short and impolite. Say 'A latte, please'."}]},
+    es:{s:"☕ En el café",d:"Estás en un café de Madrid. La camarera te saluda.",q:"¡Buenos días! ¿Qué desea?",opts:[
+      {t:"Un café con leche, por favor.",c:1,f:"✅ ¡Perfecto! 'Un café con leche' es la forma natural de pedirlo."},
+      {t:"Quiero un café con leche.",c:0,f:"❌ Es correcto pero muy directo. Mejor añadir 'por favor'."},
+      {t:"Dame un café con leche.",c:0,f:"❌ Demasiado brusco. 'Dame' sin 'por favor' es poco educado."},
+      {t:"Café leche.",c:0,f:"❌ Demasiado corto y sin cortesía."}]},
+    ar:{s:"☕ في المقهى",d:"أنت في مقهى بالدار البيضاء. النادلة تستقبلك.",q:"مرحبًا! ماذا تريد؟",opts:[
+      {t:"قهوة بالحليب، من فضلك.",c:1,f:"✅ ممتاز! 'قهوة بالحليب' هي الطريقة الطبيعية لطلب القهوة."},
+      {t:"أريد قهوة بالحليب.",c:0,f:"❌ مفهومة ولكنها مباشرة جدًا. أضف 'من فضلك'."},
+      {t:"أعطني قهوة حليب.",c:0,f:"❌ وقح جدًا! 'أعطني' بدون 'من فضلك' غير مهذب."},
+      {t:"قهوة حليب.",c:0,f:"❌ قصيرة جدًا وغير مهذبة."}]}},
+  {id:"gare",fr:{s:"🚉 À la gare",d:"Tu es à la gare de Lyon. Tu veux acheter un billet pour Marseille.",q:"Bonjour, je peux vous aider ?",opts:[
+      {t:"Un billet pour Marseille, s'il vous plaît.",c:1,f:"✅ Excellent ! Formulation courte, claire et polie."},
+      {t:"Je voudrais aller à Marseille.",c:0,f:"❌ Correct mais vague. L'agent pourrait te demander 'En train ?' Précise 'un billet'."},
+      {t:"Marseille billet.",c:0,f:"❌ Trop télégraphique ! Construis des phrases complètes."},
+      {t:"Donnez-moi Marseille.",c:0,f:"❌ 'Donnez-moi Marseille' = tu veux la ville elle-même ! Et c'est impoli."}]},
+    en:{s:"🚉 At the station",d:"You're at London Paddington. You want a ticket to Oxford.",q:"Hello, how can I help you?",opts:[
+      {t:"A ticket to Oxford, please.",c:1,f:"✅ Excellent! Clear, polite, and to the point."},
+      {t:"I want to go to Oxford.",c:0,f:"❌ Correct but vague. The agent needs to know you want a ticket."},
+      {t:"Oxford ticket.",c:0,f:"❌ Too telegraphic! Use full sentences in English."},
+      {t:"Give me Oxford.",c:0,f:"❌ 'Give me Oxford' sounds like you want the city itself! Very impolite."}]},
+    es:{s:"🚉 En la estación",d:"Estás en la estación de Atocha. Quieres un billete a Barcelona.",q:"Buenos días, ¿en qué puedo ayudarle?",opts:[
+      {t:"Un billete a Barcelona, por favor.",c:1,f:"✅ ¡Excelente! Claro, conciso y educado."},
+      {t:"Quiero ir a Barcelona.",c:0,f:"❌ Correcto pero vago. El agente necesita saber que quieres un billete."},
+      {t:"Barcelona billete.",c:0,f:"❌ Demasiado telegráfico. Usa frases completas."},
+      {t:"Dame Barcelona.",c:0,f:"❌ 'Dame Barcelona' suena a que quieres la ciudad. Muy descortés."}]},
+    ar:{s:"🚉 في المحطة",d:"أنت في محطة الدار البيضاء. تريد شراء تذكرة إلى مراكش.",q:"مرحبًا، كيف يمكنني مساعدتك؟",opts:[
+      {t:"تذكرة إلى مراكش، من فضلك.",c:1,f:"✅ ممتاز! واضح ومهذب ومباشر."},
+      {t:"أريد الذهاب إلى مراكش.",c:0,f:"❌ صحيح ولكن غير محدد. قل 'تذكرة إلى مراكش'."},
+      {t:"مراكش تذكرة.",c:0,f:"❌ مختصر جدًا! استخدم جملًا كاملة."},
+      {t:"أعطني مراكش.",c:0,f:"❌ 'أعطني مراكش' يعني أنك تريد المدينة! غير مهذب."}]}},
+  {id:"hotel",fr:{s:"🏨 À l'hôtel",d:"Tu arrives à l'hôtel à 14h. Tu as réservé une chambre.",q:"Bonjour, bienvenue ! Vous avez une réservation ?",opts:[
+      {t:"Oui, j'ai réservé une chambre au nom de [nom].",c:1,f:"✅ Parfait ! Tu confirmes ta réservation et tu donnes ton nom."},
+      {t:"Oui, je suis ici.",c:0,f:"❌ 'Je suis ici' est évident mais ne répond pas à la question."},
+      {t:"Chambre pour moi.",c:0,f:"❌ Trop direct et incomplet. Confirme la réservation avec ton nom."},
+      {t:"J'ai un lit.",c:0,f:"❌ 'J'ai un lit' ne veut rien dire ici."}]},
+    en:{s:"🏨 At the hotel",d:"You arrive at the hotel at 2 PM. You have a reservation.",q:"Good afternoon! Do you have a reservation?",opts:[
+      {t:"Yes, I have a reservation under [name].",c:1,f:"✅ Perfect! You confirm and give your name."},
+      {t:"Yes, I am here.",c:0,f:"❌ 'I am here' doesn't answer the question properly."},
+      {t:"Room for me.",c:0,f:"❌ Too direct and incomplete. Confirm your reservation."},
+      {t:"I have a bed.",c:0,f:"❌ 'I have a bed' doesn't make sense here."}]},
+    es:{s:"🏨 En el hotel",d:"Llegas al hotel a las 14h. Tienes una reserva.",q:"¡Buenas tardes! ¿Tiene una reserva?",opts:[
+      {t:"Sí, tengo una reserva a nombre de [nombre].",c:1,f:"✅ ¡Perfecto! Confirmas la reserva y das tu nombre."},
+      {t:"Sí, estoy aquí.",c:0,f:"❌ 'Estoy aquí' no responde a la pregunta."},
+      {t:"Habitación para mí.",c:0,f:"❌ Demasiado directo. Confirma tu reserva."},
+      {t:"Tengo una cama.",c:0,f:"❌ 'Tengo una cama' no significa nada aquí."}]},
+    ar:{s:"🏨 في الفندق",d:"تصل إلى الفندق الساعة الثانية بعد الظهر. لديك حجز.",q:"مساء الخير! هل لديك حجز؟",opts:[
+      {t:"نعم، لدي حجز باسم [الاسم].",c:1,f:"✅ ممتاز! تؤكد الحجز وتعطي اسمك."},
+      {t:"نعم، أنا هنا.",c:0,f:"❌ 'أنا هنا' لا يجيب على السؤال بشكل صحيح."},
+      {t:"غرفة لي.",c:0,f:"❌ مباشر جدًا وغير مكتمل. يجب تأكيد الحجز."},
+      {t:"لدي سرير.",c:0,f:"❌ 'لدي سرير' لا معنى له هنا."}]}},
+  {id:"restaurant",fr:{s:"🍽️ Au restaurant",d:"Le serveur vient de prendre ta commande. Il te demande la cuisson de ton steak.",q:"Et pour la cuisson de votre steak, vous le préférez comment ?",opts:[
+      {t:"Saignant, s'il vous plaît.",c:1,f:"✅ Excellent ! 'Saignant' est le terme exact en France pour 'rare'."},
+      {t:"Rare, s'il vous plaît.",c:0,f:"❌ En France, 'rare' n'est pas utilisé. On dit 'saignant', 'à point', 'bien cuit'."},
+      {t:"Pas trop cuit.",c:0,f:"❌ Trop vague ! Donne un degré précis de cuisson."},
+      {t:"Rouge.",c:0,f:"❌ 'Rouge' décrit la couleur mais n'est pas le terme culinaire."}]},
+    en:{s:"🍽️ At the restaurant",d:"The waiter has taken your order. He asks about your steak.",q:"How would you like your steak cooked?",opts:[
+      {t:"Medium rare, please.",c:1,f:"✅ Perfect! 'Medium rare' is the standard way to order."},
+      {t:"Rare.",c:0,f:"❌ 'Rare' is correct but 'medium rare' is more commonly used in the UK."},
+      {t:"Not too cooked.",c:0,f:"❌ Too vague! Be specific about the doneness level."},
+      {t:"Pink.",c:0,f:"❌ 'Pink' describes color but isn't a standard doneness term."}]},
+    es:{s:"🍽️ En el restaurante",d:"El camarero ha tomado tu comanda. Pregunta por la carne.",q:"¿Cómo quiere la cocción del filete?",opts:[
+      {t:"Poco hecho, por favor.",c:1,f:"✅ ¡Excelente! 'Poco hecho' es el término correcto en España."},
+      {t:"Raro.",c:0,f:"❌ 'Raro' no se usa para carne. Se dice 'poco hecho', 'al punto', 'bien hecho'."},
+      {t:"No muy cocido.",c:0,f:"❌ Demasiado vago. Especifica el término exacto."},
+      {t:"Rojo.",c:0,f:"❌ 'Rojo' no es un término culinario para la carne."}]},
+    ar:{s:"🍽️ في المطعم",d:"النادل أخذ طلبك. يسألك عن طريقة طهي الشريحة.",q:"كيف تفضلين طهي الشريحة؟",opts:[
+      {t:"نادرة، من فضلك.",c:1,f:"✅ ممتاز! 'نادرة' هي الطريقة الصحيحة لطلب اللحم غير المطهو جيدًا."},
+      {t:"نيئة.",c:0,f:"❌ 'نيئة' تعني غير مطهوة أبدًا. استخدم 'نادرة' أو 'مطبوخة جيدًا'."},
+      {t:"ليست مطبوخة كثيرًا.",c:0,f:"❌ غير محدد. يجب أن تحدد درجة الطهي بدقة."},
+      {t:"حمراء.",c:0,f:"❌ 'حمراء' تصف اللون وليست مصطلحًا للطهي."}]}},
+  {id:"pharmacie",fr:{s:"🛒 À la pharmacie",d:"Tu as mal à la tête et tu cherches un médicament.",q:"Bonjour, que puis-je faire pour vous ?",opts:[
+      {t:"J'ai mal à la tête. Vous avez quelque chose ?",c:1,f:"✅ Très bien ! Tu expliques ton symptôme et tu demandes poliment."},
+      {t:"Donnez-moi des pilules.",c:0,f:"❌ Trop vague ! 'Des pilules' peut vouloir dire n'importe quoi."},
+      {t:"Tête mal.",c:0,f:"❌ Ordre des mots incorrect ! On dit 'J'ai mal à la tête'."},
+      {t:"Je veux du paracétamol.",c:0,f:"❌ En France on dit plutôt 'Doliprane' ou on décrit son symptôme."}]},
+    en:{s:"🛒 At the pharmacy",d:"You have a headache and need medicine.",q:"Hello, how can I help you?",opts:[
+      {t:"I have a headache. Do you have something for it?",c:1,f:"✅ Good! You explain the symptom and ask politely."},
+      {t:"Give me some pills.",c:0,f:"❌ Too vague! 'Pills' could mean anything."},
+      {t:"Head hurt.",c:0,f:"❌ Wrong word order. Say 'I have a headache'."},
+      {t:"I want paracetamol.",c:0,f:"❌ In the UK, 'paracetamol' is the term but describing symptoms is more polite."}]},
+    es:{s:"🛒 En la farmacia",d:"Te duele la cabeza y buscas un medicamento.",q:"Buenos días, ¿en qué puedo ayudarle?",opts:[
+      {t:"Me duele la cabeza. ¿Tiene algo para el dolor?",c:1,f:"✅ ¡Bien! Explicas el síntoma y preguntas con cortesía."},
+      {t:"Deme pastillas.",c:0,f:"❌ Demasiado vago. 'Pastillas' puede ser cualquier cosa."},
+      {t:"Cabeza duele.",c:0,f:"❌ Orden incorrecto. Se dice 'Me duele la cabeza'."},
+      {t:"Quiero paracetamol.",c:0,f:"❌ En España se dice más 'paracetamol' pero es mejor describir síntomas."}]},
+    ar:{s:"🛒 في الصيدلية",d:"عندك صداع وتبحث عن دواء.",q:"مرحبًا، كيف يمكنني مساعدتك؟",opts:[
+      {t:"عندي صداع. هل عندك شيء له؟",c:1,f:"✅ ممتاز! تشرح العرض وتطلب بأدب."},
+      {t:"أعطني حبوب.",c:0,f:"❌ غير محدد! 'حبوب' قد تعني أي شيء."},
+      {t:"رأس ألم.",c:0,f:"❌ ترتيب كلمات خاطئ. قل 'عندي صداع'."},
+      {t:"أريد باراسيتامول.",c:0,f:"❌ صحيح ولكن من الأفضل وصف العرض أولاً."}]}},
+  {id:"taxi",fr:{s:"🚕 Dans un taxi",d:"Tu viens de monter dans un taxi à l'aéroport Charles de Gaulle.",q:"Bonjour ! Où allez-vous ?",opts:[
+      {t:"À l'hôtel Le Marais, rue de Rivoli, s'il vous plaît.",c:1,f:"✅ Parfait ! Tu donnes la destination précise avec l'adresse."},
+      {t:"Hôtel.",c:0,f:"❌ Trop vague ! Il y a des milliers d'hôtels à Paris."},
+      {t:"Centre-ville.",c:0,f:"❌ Trop large. Donne une adresse précise."},
+      {t:"Je ne sais pas encore.",c:0,f:"❌ Le taxi attend une destination !"}]},
+    en:{s:"🚕 In a taxi",d:"You just got into a taxi at Heathrow Airport.",q:"Hello! Where are you going?",opts:[
+      {t:"To the Ritz Hotel, Piccadilly, please.",c:1,f:"✅ Perfect! Precise destination with location."},
+      {t:"Hotel.",c:0,f:"❌ Too vague! There are thousands of hotels in London."},
+      {t:"City centre.",c:0,f:"❌ Too broad. Give a specific address."},
+      {t:"I don't know yet.",c:0,f:"❌ The driver needs a destination!"}]},
+    es:{s:"🚕 En un taxi",d:"Acabas de subir a un taxi en el aeropuerto de Barajas.",q:"¡Buenos días! ¿Adónde va?",opts:[
+      {t:"Al hotel Palace, en la calle Alcalá, por favor.",c:1,f:"✅ ¡Perfecto! Indicas destino y dirección precisa."},
+      {t:"Hotel.",c:0,f:"❌ Demasiado vago. Hay miles de hoteles en Madrid."},
+      {t:"Centro.",c:0,f:"❌ Demasiado amplio. Da una dirección concreta."},
+      {t:"Todavía no lo sé.",c:0,f:"❌ ¡El taxista espera un destino!"}]},
+    ar:{s:"🚕 في سيارة أجرة",d:"ركبت للتو سيارة أجرة في مطار الدار البيضاء.",q:"مرحبًا! إلى أين تذهب؟",opts:[
+      {t:"إلى فندق الحسن، شارع محمد الخامس، من فضلك.",c:1,f:"✅ ممتاز! تعطي الوجهة بدقة مع العنوان."},
+      {t:"فندق.",c:0,f:"❌ غير محدد! هناك آلاف الفنادق."},
+      {t:"وسط المدينة.",c:0,f:"❌ واسع جدًا. أعط عنوانًا محددًا."},
+      {t:"لا أعرف بعد.",c:0,f:"❌ السائق ينتظر وجهة!"}]}},
+  {id:"musee",fr:{s:"🎫 Au musée",d:"Tu es devant le guichet du Louvre. Tu veux acheter un billet.",q:"Bonjour, un billet plein tarif ?",opts:[
+      {t:"Oui, un billet plein tarif, s'il vous plaît.",c:1,f:"✅ Excellent ! Tu confirmes et restes poli."},
+      {t:"Combien ça coûte ?",c:0,f:"❌ L'agent vient de te proposer un billet. Cela interrompt le flux."},
+      {t:"Je veux voir la Joconde.",c:0,f:"❌ Ce n'est pas une réponse à sa question sur le tarif."},
+      {t:"Un.",c:0,f:"❌ Trop court ! 'Un' tout seul est incompréhensible."}]},
+    en:{s:"🎫 At the museum",d:"You're at the British Museum ticket desk.",q:"Hello, one full-price ticket?",opts:[
+      {t:"Yes, one full-price ticket, please.",c:1,f:"✅ Excellent! You confirm and stay polite."},
+      {t:"How much is it?",c:0,f:"❌ They just offered you a ticket. Answer first, ask later."},
+      {t:"I want to see the Rosetta Stone.",c:0,f:"❌ That doesn't answer their question about the ticket type."},
+      {t:"One.",c:0,f:"❌ Too short! 'One' alone is unclear."}]},
+    es:{s:"🎫 En el museo",d:"Estás en la taquilla del Museo del Prado.",q:"Buenos días, ¿un billete de tarifa completa?",opts:[
+      {t:"Sí, uno de tarifa completa, por favor.",c:1,f:"✅ ¡Excelente! Confirmas y eres educado."},
+      {t:"¿Cuánto cuesta?",c:0,f:"❌ Acaban de ofrecerte un billete. Responde primero."},
+      {t:"Quiero ver Las Meninas.",c:0,f:"❌ No responde a la pregunta sobre el billete."},
+      {t:"Uno.",c:0,f:"❌ Demasiado corto. 'Uno' solo no se entiende."}]},
+    ar:{s:"🎫 في المتحف",d:"أنت أمام شباك التذاكر في متحف الدار البيضاء.",q:"مرحبًا، هل تذكرة كاملة السعر؟",opts:[
+      {t:"نعم، تذكرة كاملة السعر، من فضلك.",c:1,f:"✅ ممتاز! تؤكد وتبقى مهذبًا."},
+      {t:"كم ثمنها؟",c:0,f:"❌ لقد عرضوا عليك تذكرة للتو. أجب أولاً."},
+      {t:"أريد رؤية المعروضات.",c:0,f:"❌ هذا لا يجيب على سؤالهم عن نوع التذكرة."},
+      {t:"واحدة.",c:0,f:"❌ قصيرة جدًا! 'واحدة' وحدها غير واضحة."}]}},
+  {id:"telephone",fr:{s:"📞 Au téléphone",d:"Tu appelles un restaurant pour réserver une table pour ce soir.",q:"Allô, Restaurant Le Petit Bistrot, j'écoute.",opts:[
+      {t:"Bonsoir, je voudrais réserver une table pour deux à 20h.",c:1,f:"✅ Parfait ! Tu salues, précises nombre de personnes et heure."},
+      {t:"Table pour ce soir.",c:0,f:"❌ Trop incomplet ! Il manque le nombre et l'heure."},
+      {t:"Je veux manger chez vous.",c:0,f:"❌ Ce n'est pas une réservation ! Donne les détails."},
+      {t:"Deux ce soir.",c:0,f:"❌ Trop télégraphique. Formule des phrases complètes."}]},
+    en:{s:"📞 On the phone",d:"You're calling a restaurant to book a table for tonight.",q:"Hello, The Ivy Restaurant, how can I help?",opts:[
+      {t:"Good evening, I'd like to book a table for two at 8 PM.",c:1,f:"✅ Perfect! Greeting, party size, and time."},
+      {t:"Table for tonight.",c:0,f:"❌ Too vague! Missing the number of guests and time."},
+      {t:"I want to eat at your place.",c:0,f:"❌ That's not a booking. Give specific details."},
+      {t:"Two tonight.",c:0,f:"❌ Too short. Use complete sentences."}]},
+    es:{s:"📞 Por teléfono",d:"Llamas a un restaurante para reservar mesa esta noche.",q:"¿Diga? Restaurante Botín, ¿en qué puedo ayudarle?",opts:[
+      {t:"Buenas tardes, querría reservar una mesa para dos a las 21h.",c:1,f:"✅ ¡Perfecto! Saludas, dices número y hora."},
+      {t:"Mesa para esta noche.",c:0,f:"❌ Demasiado incompleto. Faltan número de personas y hora."},
+      {t:"Quiero comer en su restaurante.",c:0,f:"❌ Eso no es una reserva. Da los detalles."},
+      {t:"Dos esta noche.",c:0,f:"❌ Demasiado telegráfico. Usa frases completas."}]},
+    ar:{s:"📞 على الهاتف",d:"تتصل بمطعم لحجز طاولة لهذه الليلة.",q:"ألو، مطعم الرياض، كيف يمكنني مساعدتك؟",opts:[
+      {t:"مساء الخير، أود حجز طاولة لشخصين الساعة الثامنة.",c:1,f:"✅ ممتاز! تحية وعدد الأشخاص والوقت."},
+      {t:"طاولة لهذه الليلة.",c:0,f:"❌ غير محدد! ينقص عدد الأشخاص والوقت."},
+      {t:"أريد أن آكل عندكم.",c:0,f:"❌ هذا ليس حجزًا. أعط تفاصيل محددة."},
+      {t:"اثنان هذه الليلة.",c:0,f:"❌ مختصر جدًا. استخدم جملًا كاملة."}]}},
+  {id:"consigne",fr:{s:"🧳 À la consigne",d:"Tu es à la consigne automatique de la gare. Un employé t'aide.",q:"Votre bagage est trop grand. Vous avez un autre bagage ?",opts:[
+      {t:"Non, c'est mon seul bagage. Que puis-je faire ?",c:1,f:"✅ Excellent ! Tu réponds clairement et demandes une solution poliment."},
+      {t:"Oui, un autre.",c:0,f:"❌ Tu dis le contraire de la réalité !"},
+      {t:"Problème.",c:0,f:"❌ Trop impersonnel. Formule des phrases complètes."},
+      {t:"C'est pas juste.",c:0,f:"❌ Exprime de la colère mais ne résout rien."}]},
+    en:{s:"🧳 At luggage storage",d:"You're at the station's luggage locker. An attendant helps you.",q:"Your bag is too big for standard storage. Do you have another bag?",opts:[
+      {t:"No, this is my only bag. What can I do?",c:1,f:"✅ Excellent! Clear answer and polite request for a solution."},
+      {t:"Yes, another one.",c:0,f:"❌ You just said the opposite of the truth!"},
+      {t:"Problem.",c:0,f:"❌ Too impersonal. Use complete sentences."},
+      {t:"That's not fair.",c:0,f:"❌ Expresses frustration but doesn't solve anything."}]},
+    es:{s:"🧳 En la consigna",d:"Estás en la consigna automática de la estación. Un empleado te ayuda.",q:"Su equipaje es demasiado grande. ¿Tiene otra maleta?",opts:[
+      {t:"No, es mi único equipaje. ¿Qué puedo hacer?",c:1,f:"✅ ¡Excelente! Respondes claro y pides solución educadamente."},
+      {t:"Sí, otra.",c:0,f:"❌ ¡Acabas de decir lo contrario de la verdad!"},
+      {t:"Problema.",c:0,f:"❌ Demasiado impersonal. Usa frases completas."},
+      {t:"No es justo.",c:0,f:"❌ Expresa enfado pero no resuelve nada."}]},
+    ar:{s:"🧳 في مستودع الأمتعة",d:"أنت في مستودع الأمتعة في المحطة. موظف يساعدك.",q:"حقيبتك كبيرة جدًا للتخزين العادي. هل لديك حقيبة أخرى؟",opts:[
+      {t:"لا، هذه حقيبتي الوحيدة. ماذا يمكنني أن أفعل؟",c:1,f:"✅ ممتاز! تجيب بوضوح وتطلب حلاً بأدب."},
+      {t:"نعم، أخرى.",c:0,f:"❌ لقد قلت عكس الحقيقة!"},
+      {t:"مشكلة.",c:0,f:"❌ غير شخصي. استخدم جملًا كاملة."},
+      {t:"هذا ليس عدلاً.",c:0,f:"❌ يعبر عن الغضب لكنه لا يحل شيئًا."}]}},
+  {id:"boulangerie",fr:{s:"🥖 À la boulangerie",d:"Tu es dans une boulangerie parisienne le matin.",q:"Bonjour, votre tour ! Qu'est-ce qui vous ferait plaisir ?",opts:[
+      {t:"Une baguette tradition et deux croissants, svp.",c:1,f:"✅ Parfait ! Tu commandes avec précision et politesse."},
+      {t:"Du pain.",c:0,f:"❌ Trop vague ! Précise : baguette, tradition, pain de campagne..."},
+      {t:"Je veux manger.",c:0,f:"❌ 'Je veux manger' ne commande rien de spécifique."},
+      {t:"Donnez-moi ça.",c:0,f:"❌ 'Ça' est vague et 'donnez-moi' impoli."}]},
+    en:{s:"🥖 At the bakery",d:"You're at a London bakery in the morning.",q:"Good morning! What would you like today?",opts:[
+      {t:"A sourdough loaf and two croissants, please.",c:1,f:"✅ Perfect! Specific and polite order."},
+      {t:"Bread.",c:0,f:"❌ Too vague! Specify: sourdough, baguette, wholemeal..."},
+      {t:"I want to eat.",c:0,f:"❌ 'I want to eat' doesn't order anything specific."},
+      {t:"Give me that.",c:0,f:"❌ 'That' is vague and 'give me' is impolite."}]},
+    es:{s:"🥖 En la panadería",d:"Estás en una panadería madrileña por la mañana.",q:"¡Buenos días! ¿Qué le apetece hoy?",opts:[
+      {t:"Una barra de pan y dos napolitanas, por favor.",c:1,f:"✅ ¡Perfecto! Pides con precisión y cortesía."},
+      {t:"Pan.",c:0,f:"❌ Demasiado vago. Especifica: barra, integral, de pueblo..."},
+      {t:"Quiero comer.",c:0,f:"❌ 'Quiero comer' no pide nada concreto."},
+      {t:"Deme eso.",c:0,f:"❌ 'Eso' es vago y 'deme' es poco educado."}]},
+    ar:{s:"🥖 في المخبزة",d:"أنت في مخبزة بالدار البيضاء صباحًا.",q:"صباح الخير! دوّزنا شنو غادي تعجبك؟",opts:[
+      {t:"خبزة تقليدية ومليان، من فضلك.",c:1,f:"✅ ممتاز! تطلب بدقة وبأدب."},
+      {t:"خبز.",c:0,f:"❌ غير محدد! يجب التوضيح: خبزة، كرواسان..."},
+      {t:"بغيت ناكل.",c:0,f:"❌ 'بغيت ناكل' لا يطلب شيئًا محددًا."},
+      {t:"أعطيني هاد.",c:0,f:"❌ 'هاد' غير محدد و'أعطيني' غير مهذب."}]}}
+];
+const UI = {
+  fr:{title:"Quiz 4 Langues",subtitle:"Situations du quotidien & voyage",score:"Score",next:"Question suivante →",result:"Voir mon résultat →",restart:"Rejouer",perfect:"Parfait !",perfectSub:"Tu es prêt pour voyager !",good:"Très bien !",goodSub:"Quelques ajustements et ce sera parfait.",ok:"Pas mal !",okSub:"Continue à t'entraîner !",low:"Continue l'entraînement !",lowSub:"Rejoue pour mémoriser les formulations."},
+  en:{title:"Quiz 4 Languages",subtitle:"Everyday situations & travel",score:"Score",next:"Next question →",result:"See my result →",restart:"Play again",perfect:"Perfect!",perfectSub:"You're ready to travel!",good:"Very good!",goodSub:"A few adjustments and you'll be perfect.",ok:"Not bad!",okSub:"Keep practicing!",low:"Keep training!",lowSub:"Play again to memorize the phrases."},
+  es:{title:"Quiz 4 Idiomas",subtitle:"Situaciones cotidianas y viajes",score:"Puntuación",next:"Siguiente pregunta →",result:"Ver mi resultado →",restart:"Jugar de nuevo",perfect:"¡Perfecto!",perfectSub:"¡Estás listo para viajar!",good:"¡Muy bien!",goodSub:"Unos ajustes y será perfecto.",ok:"¡No está mal!",okSub:"¡Sigue practicando!",low:"¡Sigue entrenando!",lowSub:"Juega de nuevo para memorizar."},
+  ar:{title:"اختبار 4 لغات",subtitle:"مواقف يومية وسفر",score:"النتيجة",next:"→ السؤال التالي",result:"→ عرض نتيجتي",restart:"إعادة اللعب",perfect:"!ممتاز",perfectSub:"!أنت جاهز للسفر",good:"!جيد جدًا",goodSub:"بعض التعديلات وستكون مثاليًا",ok:"!ليس سيئًا",okSub:"!واصل التدريب",low:"!واصل التمرين",lowSub:"أعد اللعب لحفظ العبارات"}
+};
+let qIdx=0,score=0,answered=false,lang='fr',theme='dark';
+
+function shuf(a){for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+function setLang(l){
+  lang=l;
+  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.dataset.lang===l));
+  const dir=l==='ar'?'rtl':'ltr';
+  document.documentElement.lang=l;
+  document.documentElement.dir=dir;
+  applyUI();
+  if(document.getElementById('quiz-screen').style.display!=='none'){showQ();}else{showRes();}
+  localStorage.setItem('quiz-lang',l);
+}
+
+function toggleTheme(){
+  theme=theme==='dark'?'light':'dark';
+  document.documentElement.setAttribute('data-theme',theme);
+  document.getElementById('theme-btn').textContent=theme==='dark'?'🌙':'☀️';
+  localStorage.setItem('quiz-theme',theme);
+}
+
+function applyUI(){
+  const u=UI[lang];
+  document.getElementById('app-title').textContent={fr:'🇫🇷 Quiz Français',en:'🇬🇧 Quiz English',es:'🇪🇸 Quiz Español',ar:'🇲🇦 اختبار الفرنسية'}[lang];
+  document.getElementById('app-subtitle').textContent=u.subtitle;
+  document.getElementById('next-btn').textContent=qIdx<QUESTIONS.length-1?u.next:u.result;
+  document.getElementById('restart-btn').textContent=u.restart;
+}
+
+function init(){
+  shuf(QUESTIONS);qIdx=0;score=0;answered=false;
+  document.getElementById('quiz-screen').style.display='block';
+  document.getElementById('result-screen').style.display='none';
+  applyUI();showQ();
+}
+
+function renderDots(){
+  const d=document.getElementById('dots');d.innerHTML='';
+  for(let i=0;i<QUESTIONS.length;i++){
+    const s=document.createElement('div');s.className='dot';
+    if(i<qIdx)s.classList.add(QUESTIONS[i]._correct?'correct':'wrong');
+    else if(i===qIdx)s.classList.add('current');
+    d.appendChild(s);
+  }
+}
+
+function showQ(){
+  answered=false;const q=QUESTIONS[qIdx],ql=q[lang];
+  document.getElementById('sit-title').textContent=ql.s;
+  document.getElementById('sit-desc').textContent=ql.d;
+  document.getElementById('dialogue').textContent=ql.q;
+  const opts=document.getElementById('options');opts.innerHTML='';
+  document.getElementById('feedback').style.display='none';
+  document.getElementById('next-btn').style.display='none';
+  const o=[...ql.opts];shuf(o);
+  q._shufOpts=o;
+  o.forEach((opt,i)=>{const b=document.createElement('button');b.className='option-btn';b.textContent=opt.t;b.onclick=()=>pick(b,i);opts.appendChild(b);});
+  renderDots();document.getElementById('score-text').textContent=UI[lang].score+': '+score+' / '+qIdx;
+}
+
+function pick(btn,idx){
+  if(answered)return;
+  answered=true;const q=QUESTIONS[qIdx],opt=q._shufOpts[idx];
+  const all=document.querySelectorAll('.option-btn');all.forEach(b=>b.classList.add('disabled'));
+  if(opt.c){btn.classList.add('correct');score++;}
+  else{btn.classList.add('wrong');all.forEach((b,i)=>{if(q._shufOpts[i].c)b.classList.add('correct');});}
+  q._correct=opt.c;
+  const fb=document.getElementById('feedback');fb.className='feedback '+(opt.c?'correct':'wrong');fb.textContent=opt.f;fb.style.display='block';
+  document.getElementById('score-text').textContent=UI[lang].score+': '+score+' / '+(qIdx+1);
+  renderDots();
+  const u=UI[lang];
+  if(qIdx<QUESTIONS.length-1){document.getElementById('next-btn').textContent=u.next;document.getElementById('next-btn').onclick=nextQ;}
+  else{document.getElementById('next-btn').textContent=u.result;document.getElementById('next-btn').onclick=showRes;}
+  document.getElementById('next-btn').style.display='block';
+}
+
+function nextQ(){qIdx++;if(qIdx<QUESTIONS.length)showQ();}
+
+function showRes(){
+  document.getElementById('quiz-screen').style.display='none';
+  document.getElementById('result-screen').style.display='block';
+  const p=Math.round((score/QUESTIONS.length)*100),u=UI[lang];
+  let e,t,s;
+  if(p===100){e='🏆';t=u.perfect;s=u.perfectSub;}
+  else if(p>=70){e='👏';t=u.good;s=u.goodSub;}
+  else if(p>=50){e='💪';t=u.ok;s=u.okSub;}
+  else{e='📚';t=u.low;s=u.lowSub;}
+  document.getElementById('res-emoji').textContent=e;
+  document.getElementById('res-title').textContent=t;
+  document.getElementById('res-subtitle').textContent=s;
+}
+
+function restart(){init();}
+
+const savedLang=localStorage.getItem('quiz-lang')||'fr';
+const savedTheme=localStorage.getItem('quiz-theme')||'dark';
+if(savedTheme==='light'){document.documentElement.setAttribute('data-theme','light');
+document.getElementById('theme-btn').textContent='☀️';}
+setLang(savedLang);
+init();
+</script>
+</body>
+</html>
