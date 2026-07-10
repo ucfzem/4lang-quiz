@@ -7,6 +7,10 @@ Create and deploy a 4-language interactive quiz app (FR/EN/ES/AR) with i18n, dar
 
 ### Steps completed
 
+*(same as before, plus:)*
+
+10. **Linktree update** — Added `4lang Quiz` to locked projects on `ucfzem.github.io/works/` → https://ucfzem.github.io/works/ (behind password gate, "Projets verrouillés" section)
+
 1. **Initial build** — Created `/tmp/4lang-quiz/index.html` (single-file, 408 lines): 10 questions × 4 languages, CSS custom property theming, RTL, localStorage preferences
 2. **Validation** — JavaScript syntax confirmed error-free
 3. **Git setup** — Created repo `ucfzem/4lang-quiz`, pushed `main` branch
