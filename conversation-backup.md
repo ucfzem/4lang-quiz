@@ -1,15 +1,17 @@
-# Session — Modals: Article, Calculator, Meditation 🔥
+# Session — Audio Meditation + Hassan fix
 
-## What was built
-- **Nutrition modal**: real "5 mistakes" article content in a bottom sheet
-- **Calculator modal**: working BMR/TDEE calculator (Mifflin-St Jeor formula) — sex/age/weight/height/activity → real kcal result
-- **Meditation modal**: 10-min guided breathing timer with animated circle (scale in/out + ↑/↓), 4s inhale / 4s exhale cycle
-- All modals: bottom-sheet overlay, close on backdrop click, close button
-- Full i18n: FR/EN/ES/AR for all article text, calculator labels/placeholders, meditation labels
-- RTL support in Arabic (Cairo font, float:inline-end close button)
+## What was done
+- **Fix**: Julien → Hassan in ALL languages (FR/EN/ES/AR)
+- **Audio meditation**: 
+  - Web Speech API (speechSynthesis) narrates "شهيق" / "زفيف" in Arabic each cycle
+  - Web Audio API ambient drone (two detuned 110Hz/113.5Hz sine oscillators)
+  - Mute toggle 🔊/🔇
+  - Audio stops cleanly on close, reset, or session end
+  - Speech only in Arabic (ar-SA) regardless of UI language
+- Missing `data-i18n-placeholder` keys added for all 4 languages
 
 ## Files changed
-- `/tmp/gh-pages/sport/index.html`: +300 lines (CSS for overlays/sheets/calculator/meditation, 3 modal HTML blocks, JS for open/close/calc/meditation, i18n keys for all 4 langs)
+- `/tmp/gh-pages/sport/index.html`: coach name Julien→Hassan, meditation JS/CSS/HTML enhanced with audio
 
 ## Links
 - **Vercel Sport**: https://ucfzem-works.vercel.app/sport/
