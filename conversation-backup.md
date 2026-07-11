@@ -1,63 +1,28 @@
-# 4Lang Quiz — Full Conversation Backup
+# Session Backup — 11 July 2026
 
-## Session: Build & Deploy 4-Language Quiz
+## Summary
+- **VoiceForge**: Refactored v4 with `committedSegments` dedup, `setRecordingUI`, `createRecognitionInstance`, `normalizeForCompare`. Fixed Android stop button (Lucide SVG DOM), restart creates fresh `SpeechRecognition` instance on `onend`, restart delay 300ms→50ms, removed "Reconnecting..." message.
+- **Liens 404**: Built an interactive click-miss button — sits calmly, teleports on mousedown, taunts in French, requires 6 catches before surrendering with a working link to /works/.
+- **Works page**: Bumped locked projects opacity 0.3→0.5, text 0.15→0.4, grayscale 100%→60% for better readability while still clearly locked.
+- **4lang-quiz v2 fixes**: Removed `.container { overflow: hidden }`, fixed `applyUI` Arabic title, restart via `addEventListener`, removed double `showQ()`, added `touch-action: manipulation`, `window.scrollTo` in showQ/nextQ.
 
-### Goal
-Create and deploy a 4-language interactive quiz app (FR/EN/ES/AR) with i18n, dark/light themes, RTL support for Arabic, Janna font.
+## Repos & Links
+| Project | Vercel | GitHub Pages | Repo |
+|---|---|---|---|
+| VoiceForge | https://voiceforge-delta.vercel.app | - | https://github.com/ucfzem/VoiceForge |
+| Works | https://ucfzem-works.vercel.app | https://ucfzem.github.io/works/ | https://github.com/ucfzem/ucfzem.github.io |
+| 4lang Quiz | https://4lang-quiz.vercel.app | https://ucfzem.github.io/4lang-quiz/ | https://github.com/ucfzem/4lang-quiz |
+| Liens 404 | - | https://ucfzem.github.io/liens/ | https://github.com/ucfzem/liens |
 
-### Steps completed
+## Commits Today
+- liens: `28d0871` — Simple click-miss button
+- liens: `59cbe98` — Fix navigation when done
+- liens: `e780737` → `c4d8a48` → `28d0871` → `59cbe98` (iterations on 404)
+- works: `d2819fc` — Locked projects opacity adjustment
+- 4lang-quiz: `06f973e` — Backup update
+- voiceforge: `9409541`, `c718ffb` — v4 refactor + deploy
 
-1. **Initial build** — Created `/tmp/4lang-quiz/index.html` (single-file, ~410 lines): 10 questions × 4 languages, CSS custom property theming, RTL, localStorage preferences
-2. **Validation** — JavaScript syntax confirmed error-free
-3. **Git setup** — Created repo `ucfzem/4lang-quiz`, pushed `main` branch
-4. **Vercel deploy #1** — Failed: sent base64-encoded content, stored as base64 text
-5. **Vercel deploy #2** — Fixed: sent raw HTML, worked but team preview URL redirected to SSO
-6. **Vercel deploy #3 (production)** — Deployed with `target:production` → aliased to `4lang-quiz.vercel.app` ✓
-7. **GitHub Pages** — Enabled via API, deployed from `main` branch root → `ucfzem.github.io/4lang-quiz/` ✓
-8. **Cloudflare** — Created Worker `4lang-quiz` proxying to Vercel, route `4lang.ucfzem.eu.org/*` → pending DNS at registrar
-9. **Arabic font** — Added `Janna LT` font for Arabic, removed italic for Arabic text
-10. **Linktree update** — Added `4lang Quiz` (middle position) to locked projects on `ucfzem.github.io/works/` → behind password gate, "Projets verrouillés" section
-11. **Final deploy & backup** — Vercel redeploy, conversation backup updated, all links shared
-
-### CSS changes (Arabic font)
-
-```css
-[lang="ar"] body{font-family:'Janna LT','Janna','Traditional Arabic',sans-serif}
-[lang="ar"] .dialogue-box{font-style:normal}
-```
-
-### All Links
-
-| Item | URL |
-|------|-----|
-| **Quiz (Vercel)** | https://4lang-quiz.vercel.app |
-| **Quiz (GitHub Pages)** | https://ucfzem.github.io/4lang-quiz/ |
-| **Linktree works** | https://ucfzem.github.io/works/ |
-| **Cloudflare (pending DNS)** | https://4lang.ucfzem.eu.org |
-| **Repo (quiz source)** | https://github.com/ucfzem/4lang-quiz |
-| **Repo (linktree)** | https://github.com/ucfzem/ucfzem.github.io |
-| **Summary** | https://github.com/ucfzem/4lang-quiz/blob/main/4lang-quiz-summary.md |
-| **This backup** | https://github.com/ucfzem/4lang-quiz/blob/main/conversation-backup.md |
-
-### Commits (v2)
-- `5eb2c58` — touch-action: manipulation on buttons for mobile tap reliability
-- `aa25417` — scroll to top on question change so next button is visible
-
-## Session 2026-07-11 — Bug fixes
-
-### Fixed
-1. **Container overflow hidden** — `.container { overflow: hidden }` coupait le bouton "Suivant" sur mobile quand le contenu dépassait l'écran. Retiré.
-2. **Titre arabe erroné** — Affiche "🇲🇦 اختبار الفرنسية" (Test Français) au lieu de "اختبار 4 لغات". Fix: `applyUI` utilise `UI[lang].title` avec préfixe drapeau au lieu d'un objet hardcodé.
-3. **Bouton Rejouer** — `onclick="restart()"` retiré de l'HTML, remplacé par `addEventListener('click', restart)` en JS pour fiabilité mobile.
-4. **Double showQ() au chargement** — `setLang(savedLang)` puis `init()` appelaient `showQ()` deux fois, causant un flash de contenu et un ordre de questions différent. Fix: init contourne `setLang`, applique la langue directement.
-5. **Bouton "Suivant" invisible sur mobile** — Après avoir répondu, la page restait en bas, le bouton "Suivant" était hors écran. Fix: `window.scrollTo({top:0,behavior:'smooth'})` dans `showQ()` et `nextQ()`.
-6. **Boutons peu réactifs sur mobile** — Ajout de `touch-action: manipulation` sur `.restart-btn`, `.next-btn`, `.option-btn`.
-
-### Commits
-- `827ab5f` — Container overflow, arabic title, restart listener, init flow
-- `aa25417` — Scroll to top on question change
-- `5eb2c58` — Touch-action manipulation on buttons
-
-### Known issues
-- Cloudflare domain `ucfzem.eu.org` stuck in `pending` with `activation_failure_reason: "unresolvable"` — needs nameserver change at registrar
-- Vercel team preview URLs (`*-ucfzem-s-projects.vercel.app`) redirect to SSO login; production alias `4lang-quiz.vercel.app` works publicly
+## Credentials
+- Vercel token: ✓ (set in env)
+- GitHub token: ✓ (set in env)
+- Cloudflare password: ✓ (stored securely)
