@@ -5,8 +5,7 @@
 - **Liens 404**: Built an interactive click-miss button — sits calmly, teleports on mousedown, taunts in French, requires 6 catches before surrendering with a working link to /works/.
 - **Works page**: Bumped locked projects opacity 0.3→0.5, text 0.15→0.4, grayscale 100%→60% for better readability while still clearly locked.
 - **4lang-quiz v2 fixes**: Removed `.container { overflow: hidden }`, fixed `applyUI` Arabic title, restart via `addEventListener`, removed double `showQ()`, added `touch-action: manipulation`, `window.scrollTo` in showQ/nextQ.
-- **Sport page**: New complete fitness landing page at ucfzem.github.io/sport/ with real working links (WHO, Anses, YouTube coach channels, PubMed, ACSM, macro calculator, meditation). Named "Sport" with gold/dark theme. Added to works page as public project and to locked section (middle, between VoiceForge and 4lang Quiz).
-- **Sport i18n**: Added full 4-language i18n (FR/EN/ES/AR) with Moroccan flag for Arabic, RTL support, dark/light theme toggle, responsive for phone/tablet/PC/TV with TV remote keyboard nav.
+- **Sport page**: Fitness landing page at ucfzem.github.io/sport/. Full i18n (4 langs FR/EN/ES/AR 🇫🇷🇬🇧🇪🇸🇲🇦), RTL for Arabic, dark/light theme toggle (🌙/☀️), responsive 320px→4K, TV remote keyboard nav. Dark: #0d0d0d/gold/white. Light: beige/brown/gold. No layout jumping on language switch. Removed from public projects, kept only in locked section (💪 between VoiceForge and 4lang Quiz).
 
 ## Repos & Links
 | Project | Vercel | GitHub Pages | Repo |
@@ -25,7 +24,8 @@
 - works: `d2819fc` — Locked projects opacity adjustment
 - works: `f709e9a` — Added Sport fitness page + linked in works
 - works: `8e54f4c` — Added Sport to locked projects (middle, VoiceForge ↔ 4lang Quiz)
-- sport: Full rewrite with i18n (4 langs), RTL, dark/light theme, responsive 320px→4K, TV remote keyboard nav
+- works: `c6ee77c` — Sport full i18n (4 langs, RTL, theme toggle, responsive)
+- works: `54f9e33` — Removed Sport from public projects, locked only
 - 4lang-quiz: `06f973e` → `e8d41ab` → `ad6574c` → `9b0e808` → ... → `ad6574c` (backup updates)
 - voiceforge: `9409541`, `c718ffb` — v4 refactor + deploy
 
