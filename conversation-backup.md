@@ -1,17 +1,15 @@
-# Session — Solid gold buttons #C5A059 + Arabic coach names + DH currency
+# Session — Modals: Article, Calculator, Meditation 🔥
 
-## What was done
-- Buttons: replaced gradient `var(--gold-grad)` with solid `#C5A059`
-  - `.btn-primary`: gold filled (#C5A059 bg, #1A1A1A text, no border)
-  - `.btn-outline`: gold outlined (transparent bg, #C5A059 border/text)
-  - `.btn-dark`: kept text-based outline
-  - Added base `.btn` class with shared properties (padding 15px 30px, border-radius 50px, etc.)
-- Arabic coach names: Sarah → سارة, Julien → حسن, Myriam → مريم (with `data-i18n` keys)
-- Price split into `num` + `cur` keys, `.price-cur { font-size: .6em }` for smaller درهم/DH
-- Currency changed from € to DH (200/300/500)
+## What was built
+- **Nutrition modal**: real "5 mistakes" article content in a bottom sheet
+- **Calculator modal**: working BMR/TDEE calculator (Mifflin-St Jeor formula) — sex/age/weight/height/activity → real kcal result
+- **Meditation modal**: 10-min guided breathing timer with animated circle (scale in/out + ↑/↓), 4s inhale / 4s exhale cycle
+- All modals: bottom-sheet overlay, close on backdrop click, close button
+- Full i18n: FR/EN/ES/AR for all article text, calculator labels/placeholders, meditation labels
+- RTL support in Arabic (Cairo font, float:inline-end close button)
 
 ## Files changed
-- `/tmp/gh-pages/sport/index.html`: button CSS, coach HTML, i18n keys, price structure
+- `/tmp/gh-pages/sport/index.html`: +300 lines (CSS for overlays/sheets/calculator/meditation, 3 modal HTML blocks, JS for open/close/calc/meditation, i18n keys for all 4 langs)
 
 ## Links
 - **Vercel Sport**: https://ucfzem-works.vercel.app/sport/
