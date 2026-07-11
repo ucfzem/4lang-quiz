@@ -39,6 +39,10 @@ Create and deploy a 4-language interactive quiz app (FR/EN/ES/AR) with i18n, dar
 | **Summary** | https://github.com/ucfzem/4lang-quiz/blob/main/4lang-quiz-summary.md |
 | **This backup** | https://github.com/ucfzem/4lang-quiz/blob/main/conversation-backup.md |
 
+### Commits (v2)
+- `5eb2c58` — touch-action: manipulation on buttons for mobile tap reliability
+- `aa25417` — scroll to top on question change so next button is visible
+
 ## Session 2026-07-11 — Bug fixes
 
 ### Fixed
@@ -46,9 +50,13 @@ Create and deploy a 4-language interactive quiz app (FR/EN/ES/AR) with i18n, dar
 2. **Titre arabe erroné** — Affiche "🇲🇦 اختبار الفرنسية" (Test Français) au lieu de "اختبار 4 لغات". Fix: `applyUI` utilise `UI[lang].title` avec préfixe drapeau au lieu d'un objet hardcodé.
 3. **Bouton Rejouer** — `onclick="restart()"` retiré de l'HTML, remplacé par `addEventListener('click', restart)` en JS pour fiabilité mobile.
 4. **Double showQ() au chargement** — `setLang(savedLang)` puis `init()` appelaient `showQ()` deux fois, causant un flash de contenu et un ordre de questions différent. Fix: init contourne `setLang`, applique la langue directement.
+5. **Bouton "Suivant" invisible sur mobile** — Après avoir répondu, la page restait en bas, le bouton "Suivant" était hors écran. Fix: `window.scrollTo({top:0,behavior:'smooth'})` dans `showQ()` et `nextQ()`.
+6. **Boutons peu réactifs sur mobile** — Ajout de `touch-action: manipulation` sur `.restart-btn`, `.next-btn`, `.option-btn`.
 
-### Commit
-`827ab5f` — Fix: container overflow clipping, arabic title, restart button listener, init flow
+### Commits
+- `827ab5f` — Container overflow, arabic title, restart listener, init flow
+- `aa25417` — Scroll to top on question change
+- `5eb2c58` — Touch-action manipulation on buttons
 
 ### Known issues
 - Cloudflare domain `ucfzem.eu.org` stuck in `pending` with `activation_failure_reason: "unresolvable"` — needs nameserver change at registrar
