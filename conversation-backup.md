@@ -1,19 +1,16 @@
-# Session — Audio fixes + drone volume boost
+# Session — Audio fixes + chimes instead of TTS
 
-## What was fixed
-1. **Julien → Hassan** in ALL 4 languages (FR/EN/ES/AR)
-2. **Meditation audio crackle**:
-   - 110Hz → 220Hz (cleaner on phone speakers)
-   - Volume: 0.025 → 0.08 (louder drone)
-   - Duck: 0.008 → 0.025 (still audible under voice)
-   - Voice ducking: drone lowers when speech speaks, rises after
-   - Arabic voice detection via `onvoiceschanged`
-   - Clean fade in/out ramps (no clicks/pops)
-   - No double-start AudioContext guard
-3. **All modals**: article "5 mistakes", BMR/TDEE calculator, 10min breathing meditation with audio
+## What was done
+- Drone volume boosted 0.025 → 0.3 (12× louder, clean 220Hz sine)
+- Replaced Web Speech TTS with musical chime cues (440Hz شهيق, 220Hz زفير, 660Hz start, 880Hz done)
+- Removed duckDrone/unduckDrone (no longer needed without TTS)
+- Removed Arabic voice loading code
+- Drone fade-in/out with `setValueAtTime` + `linearRampToValueAtTime` (no clicks)
+- `playChime()` creates a fresh AudioContext per chime, auto-closes after duration
+- Julien → Hassan in all 4 languages
 
 ## Files changed
-- `/tmp/gh-pages/sport/index.html`: drone frequencies/gain, ducking, voice loading, coach names
+- `/tmp/gh-pages/sport/index.html`
 
 ## Links
 - **Vercel Sport**: https://ucfzem-works.vercel.app/sport/
