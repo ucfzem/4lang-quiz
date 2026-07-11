@@ -1,17 +1,13 @@
-# Session — Audio Meditation + Hassan fix
+# Session — Audio fixes + Volume boost
 
 ## What was done
-- **Fix**: Julien → Hassan in ALL languages (FR/EN/ES/AR)
-- **Audio meditation**: 
-  - Web Speech API (speechSynthesis) narrates "شهيق" / "زفيف" in Arabic each cycle
-  - Web Audio API ambient drone (two detuned 110Hz/113.5Hz sine oscillators)
-  - Mute toggle 🔊/🔇
-  - Audio stops cleanly on close, reset, or session end
-  - Speech only in Arabic (ar-SA) regardless of UI language
-- Missing `data-i18n-placeholder` keys added for all 4 languages
+- **Audio fixes**: 220Hz drone (instead of 110Hz), voice ducking (drone lowers during speech), Arabic voice detection via `onvoiceschanged`, clean `setValueAtTime`/`linearRampToValueAtTime` ramps, no AudioContext stacking
+- **Volume boost**: drone gain 0.025→0.08, duck level 0.008→0.025 (3x louder)
+- Julien → Hassan in all 4 languages
+- Full i18n for modals (FR/EN/ES/AR)
 
 ## Files changed
-- `/tmp/gh-pages/sport/index.html`: coach name Julien→Hassan, meditation JS/CSS/HTML enhanced with audio
+- `/tmp/gh-pages/sport/index.html`: meditation JS audio engine
 
 ## Links
 - **Vercel Sport**: https://ucfzem-works.vercel.app/sport/
