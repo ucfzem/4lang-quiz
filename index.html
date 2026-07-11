@@ -355,6 +355,7 @@ function renderDots(){
 
 function showQ(){
   answered=false;const q=QUESTIONS[qIdx],ql=q[lang];
+  window.scrollTo({top:0,behavior:'smooth'});
   document.getElementById('sit-title').textContent=ql.s;
   document.getElementById('sit-desc').textContent=ql.d;
   document.getElementById('dialogue').textContent=ql.q;
@@ -383,7 +384,7 @@ function pick(btn,idx){
   document.getElementById('next-btn').style.display='block';
 }
 
-function nextQ(){qIdx++;if(qIdx<QUESTIONS.length)showQ();}
+function nextQ(){qIdx++;if(qIdx<QUESTIONS.length){showQ();window.scrollTo({top:0,behavior:'smooth'});}}
 
 function showRes(){
   document.getElementById('quiz-screen').style.display='none';
