@@ -39,6 +39,17 @@ Create and deploy a 4-language interactive quiz app (FR/EN/ES/AR) with i18n, dar
 | **Summary** | https://github.com/ucfzem/4lang-quiz/blob/main/4lang-quiz-summary.md |
 | **This backup** | https://github.com/ucfzem/4lang-quiz/blob/main/conversation-backup.md |
 
+## Session 2026-07-11 — Bug fixes
+
+### Fixed
+1. **Container overflow hidden** — `.container { overflow: hidden }` coupait le bouton "Suivant" sur mobile quand le contenu dépassait l'écran. Retiré.
+2. **Titre arabe erroné** — Affiche "🇲🇦 اختبار الفرنسية" (Test Français) au lieu de "اختبار 4 لغات". Fix: `applyUI` utilise `UI[lang].title` avec préfixe drapeau au lieu d'un objet hardcodé.
+3. **Bouton Rejouer** — `onclick="restart()"` retiré de l'HTML, remplacé par `addEventListener('click', restart)` en JS pour fiabilité mobile.
+4. **Double showQ() au chargement** — `setLang(savedLang)` puis `init()` appelaient `showQ()` deux fois, causant un flash de contenu et un ordre de questions différent. Fix: init contourne `setLang`, applique la langue directement.
+
+### Commit
+`827ab5f` — Fix: container overflow clipping, arabic title, restart button listener, init flow
+
 ### Known issues
 - Cloudflare domain `ucfzem.eu.org` stuck in `pending` with `activation_failure_reason: "unresolvable"` — needs nameserver change at registrar
 - Vercel team preview URLs (`*-ucfzem-s-projects.vercel.app`) redirect to SSO login; production alias `4lang-quiz.vercel.app` works publicly
