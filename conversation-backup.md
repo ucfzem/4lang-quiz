@@ -1,13 +1,19 @@
-# Session — Audio fixes + Volume boost
+# Session — Audio fixes + drone volume boost
 
-## What was done
-- **Audio fixes**: 220Hz drone (instead of 110Hz), voice ducking (drone lowers during speech), Arabic voice detection via `onvoiceschanged`, clean `setValueAtTime`/`linearRampToValueAtTime` ramps, no AudioContext stacking
-- **Volume boost**: drone gain 0.025→0.08, duck level 0.008→0.025 (3x louder)
-- Julien → Hassan in all 4 languages
-- Full i18n for modals (FR/EN/ES/AR)
+## What was fixed
+1. **Julien → Hassan** in ALL 4 languages (FR/EN/ES/AR)
+2. **Meditation audio crackle**:
+   - 110Hz → 220Hz (cleaner on phone speakers)
+   - Volume: 0.025 → 0.08 (louder drone)
+   - Duck: 0.008 → 0.025 (still audible under voice)
+   - Voice ducking: drone lowers when speech speaks, rises after
+   - Arabic voice detection via `onvoiceschanged`
+   - Clean fade in/out ramps (no clicks/pops)
+   - No double-start AudioContext guard
+3. **All modals**: article "5 mistakes", BMR/TDEE calculator, 10min breathing meditation with audio
 
 ## Files changed
-- `/tmp/gh-pages/sport/index.html`: meditation JS audio engine
+- `/tmp/gh-pages/sport/index.html`: drone frequencies/gain, ducking, voice loading, coach names
 
 ## Links
 - **Vercel Sport**: https://ucfzem-works.vercel.app/sport/
