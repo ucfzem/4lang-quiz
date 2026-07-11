@@ -12,12 +12,13 @@
 | VoiceForge | https://voiceforge-delta.vercel.app | - | https://github.com/ucfzem/VoiceForge |
 | Works | https://ucfzem-works.vercel.app | https://ucfzem.github.io/works/ | https://github.com/ucfzem/ucfzem.github.io |
 | 4lang Quiz | https://4lang-quiz.vercel.app | https://ucfzem.github.io/4lang-quiz/ | https://github.com/ucfzem/4lang-quiz |
-| Liens 404 | - | https://ucfzem.github.io/liens/ | https://github.com/ucfzem/liens |
+| Liens 404 (→ Vercel Works) | - | https://ucfzem.github.io/liens/ | https://github.com/ucfzem/liens |
 
 ## Commits Today
 - liens: `28d0871` — Simple click-miss button
 - liens: `59cbe98` — Fix navigation when done
-- liens: `e780737` → `c4d8a48` → `28d0871` → `59cbe98` (iterations on 404)
+- liens: `3510bee` — Target changed to ucfzem-works.vercel.app/works/
+- liens: `e780737` → `c4d8a48` → `28d0871` → `59cbe98` → `3510bee` (iterations on 404)
 - works: `d2819fc` — Locked projects opacity adjustment
 - 4lang-quiz: `06f973e` — Backup update
 - voiceforge: `9409541`, `c718ffb` — v4 refactor + deploy
