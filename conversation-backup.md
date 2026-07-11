@@ -1,20 +1,23 @@
-# Session — Currency DH + درهم smaller
+# Session — Arabic coach names + price num/cur split
 
 ## What was done
-- Changed all prices from EUR to DH/MAD
-  - 19,99€ → 200 DH / 200 درهم
-  - 29,99€ → 300 DH / 300 درهم
-  - 49,99€ → 500 DH / 500 درهم
-- Split price into `num` + `cur` keys for separate styling
-- Added `.price-cur { font-size: .6em }` so "درهم" and "DH" render smaller than the number
-- Added `/mes` for Spanish and `/شهر` for Arabic month labels
-- All 4 languages (FR/EN/ES/AR) updated
+- Arabized coach names:
+  - Sarah → سارة
+  - Julien → حسن (Hassan)
+  - Myriam → مريم
+- Added `data-i18n="coach.c[123].name"` to all coach `<h3>` elements
+- Added name keys in all 4 languages (FR/EN/ES keep Latin, AR uses Arabic)
+- Price split into `num` + `cur` keys with `.price-cur { font-size: .6em }`
 
 ## Files changed
-- `/tmp/gh-pages/sport/index.html`: price HTML + i18n keys + CSS
+- `/tmp/gh-pages/sport/index.html`: coach HTML + i18n keys
 
 ## Links
 - **Vercel**: https://ucfzem-works.vercel.app/sport/
 - **GitHub Pages**: https://ucfzem.github.io/sport/
-- **Works link tree**: https://ucfzem-works.vercel.app/works/
-- **GitHub repo**: https://github.com/ucfzem/ucfzem.github.io
+- **Works**: https://ucfzem-works.vercel.app/works/
+- **4lang-quiz**: https://4lang-quiz.vercel.app
+- **VoiceForge**: https://voiceforge-delta.vercel.app
+- **liens**: https://ucfzem.github.io/liens/
+- **GitHub**: https://github.com/ucfzem/ucfzem.github.io
+- **Backup**: https://github.com/ucfzem/4lang-quiz/blob/main/conversation-backup.md
