@@ -1,21 +1,21 @@
-# Session — Sounds of Nature final + Works link tree update
+# Session — All 16 sounds fixed + loopable
 
 ## What was done
-- Sounds of Nature page redesigned (dark green, BBC-style, 3 sections: ambiances/animaux/events)
-- 16 local MP3 sounds uploaded to `sounds-of-nature/assets/`
-- Added **Sounds of Nature (🌿)** to locked projects on works page (after Sport, before 4lang Quiz)
-- Vercel deploy: works + sounds-of-nature live
+- Fixed children/rooster/frog sounds (were one-shot triggers, now loopable ambiences)
+- Added ALL 16 uploaded MP3s to the grid (including 2 cicadas, 2 roosters, 2 rivers, 2 rains, 2 birds)
+- Removed trigger section, unified everything in one loopable grid
+- All sounds: press to play (loop), press again to stop
+- Added Sounds of Nature (🌿) to locked projects on works page
 
 ## Files changed
-- `/tmp/gh-pages/sounds-of-nature/index.html`: new design with local MP3s
+- `/tmp/gh-pages/sounds-of-nature/index.html`: simplified to one grid, all 16 sounds
 - `/tmp/gh-pages/works/index.html`: added Sounds of Nature entry
 
 ## Links
-- **Vercel Works**: https://ucfzem-works.vercel.app/works/
-- **GitHub Works**: https://ucfzem.github.io/works/
 - **Vercel Sounds**: https://ucfzem-works.vercel.app/sounds-of-nature/
 - **GitHub Sounds**: https://ucfzem.github.io/sounds-of-nature/
-- **Sounds assets**: https://github.com/ucfzem/ucfzem.github.io/tree/main/sounds-of-nature/assets
+- **Vercel Works**: https://ucfzem-works.vercel.app/works/
+- **GitHub Works**: https://ucfzem.github.io/works/
 - **Sport**: https://ucfzem-works.vercel.app/sport/
 - **VoiceForge**: https://voiceforge-delta.vercel.app
 - **4lang-quiz**: https://4lang-quiz.vercel.app
