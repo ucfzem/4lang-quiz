@@ -1,14 +1,14 @@
-# Session — All 16 sounds fixed + loopable
+# Session — Final : All 16 sounds loopable + Works link tree
 
 ## What was done
-- Fixed children/rooster/frog sounds (were one-shot triggers, now loopable ambiences)
-- Added ALL 16 uploaded MP3s to the grid (including 2 cicadas, 2 roosters, 2 rivers, 2 rains, 2 birds)
-- Removed trigger section, unified everything in one loopable grid
-- All sounds: press to play (loop), press again to stop
+- Fixed children/rooster/frog triggers → loopable ambiences
+- Added ALL 16 uploaded MP3s in one unified grid
+- Removed one-shot trigger system, all sounds toggle play/stop
 - Added Sounds of Nature (🌿) to locked projects on works page
+- Vercel deploy × GitHub Pages sync
 
 ## Files changed
-- `/tmp/gh-pages/sounds-of-nature/index.html`: simplified to one grid, all 16 sounds
+- `/tmp/gh-pages/sounds-of-nature/index.html`: simplified + all 16 sounds
 - `/tmp/gh-pages/works/index.html`: added Sounds of Nature entry
 
 ## Links
